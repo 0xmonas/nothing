@@ -46,11 +46,13 @@
             transition: color 0.3s;
         }
         .square {
-            width: 50px;
-            height: 50px;
+            width: 30px;
+            height: 30px;
             background: #fff;
-            margin: 40px auto;
             animation: rotate 20s linear infinite;
+            position: fixed;
+            top: 20px;
+            left: 20px;
         }
         @keyframes rotate {
             to { transform: rotate(360deg); }
@@ -59,16 +61,108 @@
             margin: 20px 0;
             font-size: 0.9em;
         }
+        .nothing-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding: 10px;
+            width: 200px;
+            scrollbar-width: none;
+        }
+        .nothing-list::-webkit-scrollbar {
+            display: none;
+        }
+        .nothing-item {
+            margin: 10px 0;
+            opacity: 1;
+            transition: all 1s ease;
+        }
+        .nothing-item.done {
+            text-decoration: line-through;
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        .button {
+            background: transparent;
+            border: 1px solid #666;
+            color: #666;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: monospace;
+            transition: all 0.3s;
+        }
+        .button:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+        .counter {
+            font-size: 0.8em;
+            color: #666;
+            margin: 10px 0;
+        }
+        .x-logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .x-logo:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="square"></div>
+        <a href="https://x.com/nthngdotfun" target="_blank" class="x-logo">
+            <svg viewBox="0 0 24 24" fill="#fff">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+        </a>
         <div class="ticker">$NTHNG</div>
         <a href="https://dexscreener.com/solana/8LDSMRZvSk5Fu7Yb9M3bDThPBFLt3QRSwiwQyBfMWMFW" target="_blank" class="ca">
             8LDSMRZvSk5Fu7Yb9M3bDThPBFLt3QRSwiwQyBfMWMFW
         </a>
-        <div class="square"></div>
+        <div class="nothing-list" id="nothingList"></div>
+        <button class="button" id="doNothing">do nothing</button>
+        <div class="counter" id="counter">0 nothings done</div>
         <div class="text">nothing is something</div>
     </div>
+
+    <script>
+        let count = 0;
+        const nothingList = document.getElementById('nothingList');
+        const button = document.getElementById('doNothing');
+        const counter = document.getElementById('counter');
+
+        function addNothing() {
+            count++;
+            counter.textContent = `${count} nothings done`;
+
+            const nothing = document.createElement('div');
+            nothing.className = 'nothing-item';
+            nothing.textContent = 'nothing';
+            nothingList.appendChild(nothing);
+
+            // Scroll to bottom
+            nothingList.scrollTop = nothingList.scrollHeight;
+
+            // Mark as done and fade out
+            setTimeout(() => {
+                nothing.classList.add('done');
+            }, 100);
+
+            // Remove after animation
+            setTimeout(() => {
+                nothingList.removeChild(nothing);
+            }, 1100);
+        }
+
+        button.addEventListener('click', addNothing);
+    </script>
 </body>
 </html>
